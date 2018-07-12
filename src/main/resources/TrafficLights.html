@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Traffic Lights</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<!--Obviously in an ideal world the styling and css will be in separate files.-->
+<style>
+  .trafficLight {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: black;
+    width: 200px;
+    height: 500px;
+  }
+
+  .trafficLight__light {
+    height: 120px;
+    width: 120px;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px
+  }
+
+  .trafficLight__light--red {
+    background: darkred;
+    background: radial-gradient(circle at 80px 80px, darkred, #000);
+  }
+
+  .trafficLight__light--red-highlight {
+    background: red;
+    background: radial-gradient(circle at 80px 80px, red, #000);
+  }
+
+  .trafficLight__light--orange {
+    background: darkorange;
+    background: radial-gradient(circle at 80px 80px, darkorange, #000);
+  }
+
+  .trafficLight__light--orange-highlight {
+    background: #ffb300;
+    background: radial-gradient(circle at 80px 80px, #ffb300, #000);
+  }
+
+  .trafficLight__light--green {
+    background: darkgreen;
+    background: radial-gradient(circle at 80px 80px, darkgreen, #000);
+  }
+
+  .trafficLight__light--green-highlight {
+    background: limegreen;
+    background: radial-gradient(circle at 80px 80px, limegreen, #000);
+  }
+</style>
+
+<body>
+<script>
+    let lightsEnum = {
+        RED: 0,
+        ORANGE: 1,
+        GREEN: 2,
+        properties: {
+            0: {name: "red", value: 1},
+            1: {name: "orange", value: 2},
+            2: {name: "green", value: 3}
+        }
+    };
+
+    $(document).ready(() => {
+        //Initialise the array to 0;
+        let lightArray = [0, 0, 0];
+
+        //Set the position of red to 1 in the array. This is the starting colour.
+        lightArray[lightsEnum.RED] = 1;
+        turnOnTrafficLight();
+
+        $('#step').click(() => {
+            //Get the index of the currently selected light.
+            let currentSelectedLight = lightArray.findIndex((value) => {
+                return value === 1
+            });
+            //Need to set the currently selected light to off.
+            lightArray[currentSelectedLight] = 0;
+            //if the index is 0, we need to start from the end of the array.
+            if (currentSelectedLight === 0) {
+                currentSelectedLight = 2;
+            } else {
+                //Go to the previous light in the array. In Ireland, the lights go from
+                //Red --> Green --> Orange --> Red.
+                currentSelectedLight = currentSelectedLight - 1;
+            }
+            //Set the newly selected light to on.
+            lightArray[currentSelectedLight] = 1;
+            turnOnTrafficLight();
+        });
+
+        //This method iterates through the array, and sets the required classes
+        //for the individual traffic lights to on or off depending on the array value.
+        function turnOnTrafficLight() {
+            lightArray.forEach((item, index) => {
+                let name = lightsEnum.properties[index].name;
+                let cssName = 'trafficLight__light--' + name;
+                //Turn off the traffic light, else switch it on.
+                if (item === 0) {
+                    $('#' + name).removeClass(cssName + '-highlight');
+                } else {
+                    $('#' + name).addClass(cssName + '-highlight');
+                }
+            })
+        }
+
+    });
+</script>
+
+<div>
+  <div class="trafficLight" id="trafficLight">
+    <div class="trafficLight__light trafficLight__light--red" id="red">
+    </div>
+    <div class="trafficLight__light trafficLight__light--orange" id="orange">
+    </div>
+    <div class="trafficLight__light trafficLight__light--green" id="green">
+    </div>
+  </div>
+  <button id="step">Click Me!</button>
+</div>
+</body>
+</html>
