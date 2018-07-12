@@ -60,61 +60,61 @@
 
 <body>
 <script>
-    let lightsEnum = {
-        RED: 0,
-        ORANGE: 1,
-        GREEN: 2,
-        properties: {
-            0: {name: "red", value: 1},
-            1: {name: "orange", value: 2},
-            2: {name: "green", value: 3}
-        }
-    };
+  let lightsEnum = {
+    RED: 0,
+    ORANGE: 1,
+    GREEN: 2,
+    properties: {
+      0: {name: "red", value: 1},
+      1: {name: "orange", value: 2},
+      2: {name: "green", value: 3}
+    }
+  };
 
-    $(document).ready(() => {
-        //Initialise the array to 0;
-        let lightArray = [0, 0, 0];
+  $(document).ready(() => {
+    //Initialise the array to 0;
+    let lightArray = [0, 0, 0];
 
-        //Set the position of red to 1 in the array. This is the starting colour.
-        lightArray[lightsEnum.RED] = 1;
-        turnOnTrafficLight();
+    //Set the position of red to 1 in the array. This is the starting colour.
+    lightArray[lightsEnum.RED] = 1;
+    turnOnTrafficLight();
 
-        $('#step').click(() => {
-            //Get the index of the currently selected light.
-            let currentSelectedLight = lightArray.findIndex((value) => {
-                return value === 1
-            });
-            //Need to set the currently selected light to off.
-            lightArray[currentSelectedLight] = 0;
-            //if the index is 0, we need to start from the end of the array.
-            if (currentSelectedLight === 0) {
-                currentSelectedLight = 2;
-            } else {
-                //Go to the previous light in the array. In Ireland, the lights go from
-                //Red --> Green --> Orange --> Red.
-                currentSelectedLight = currentSelectedLight - 1;
-            }
-            //Set the newly selected light to on.
-            lightArray[currentSelectedLight] = 1;
-            turnOnTrafficLight();
-        });
-
-        //This method iterates through the array, and sets the required classes
-        //for the individual traffic lights to on or off depending on the array value.
-        function turnOnTrafficLight() {
-            lightArray.forEach((item, index) => {
-                let name = lightsEnum.properties[index].name;
-                let cssName = 'trafficLight__light--' + name;
-                //Turn off the traffic light, else switch it on.
-                if (item === 0) {
-                    $('#' + name).removeClass(cssName + '-highlight');
-                } else {
-                    $('#' + name).addClass(cssName + '-highlight');
-                }
-            })
-        }
-
+    $('#step').click(() => {
+      //Get the index of the currently selected light.
+      let currentSelectedLight = lightArray.findIndex((value) => {
+        return value === 1
+      });
+      //Need to set the currently selected light to off.
+      lightArray[currentSelectedLight] = 0;
+      //if the index is 0, we need to start from the end of the array.
+      if (currentSelectedLight === 0) {
+        currentSelectedLight = 2;
+      } else {
+        //Go to the previous light in the array. In Ireland, the lights go from
+        //Red --> Green --> Orange --> Red.
+        currentSelectedLight = currentSelectedLight - 1;
+      }
+      //Set the newly selected light to on.
+      lightArray[currentSelectedLight] = 1;
+      turnOnTrafficLight();
     });
+
+    //This method iterates through the array, and sets the required classes
+    //for the individual traffic lights to on or off depending on the array value.
+    function turnOnTrafficLight() {
+      lightArray.forEach((item, index) => {
+        let name = lightsEnum.properties[index].name;
+        let cssName = 'trafficLight__light--' + name;
+        //Turn off the traffic light, else switch it on.
+        if (item === 0) {
+          $('#' + name).removeClass(cssName + '-highlight');
+        } else {
+          $('#' + name).addClass(cssName + '-highlight');
+        }
+      })
+    }
+
+  });
 </script>
 
 <div>

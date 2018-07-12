@@ -1,4 +1,4 @@
-package com.assessment.traffic.trafficLights;
+package com.assessment.traffic.trafficLight;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,10 +8,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TrafficManagerImplTest {
+public class TrafficLightImplTest {
 
-    @Test
-    public void start() {
-        Assert.assertEquals(1, 1);
-    }
+  @Test
+  public void start() {
+    Assert.assertEquals(1, 1);
+  }
 }
