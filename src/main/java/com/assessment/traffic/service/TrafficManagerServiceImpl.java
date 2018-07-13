@@ -1,14 +1,11 @@
 package com.assessment.traffic.service;
 
 import com.assessment.traffic.trafficLight.TrafficLight;
-import com.assessment.traffic.trafficLight.TrafficLightImpl;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +18,10 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
   public TrafficManagerServiceImpl(Logger logger, List<TrafficLight> trafficLights) {
     TrafficManagerServiceImpl.logger = logger;
     this.trafficLights = trafficLights;
+  }
+
+  public List<TrafficLight> getTrafficLights() {
+    return trafficLights;
   }
 
   //Added this post construct annotation here to start up the traffic light processing as soon as this bean

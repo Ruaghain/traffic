@@ -3,7 +3,6 @@ package com.assessment.traffic.trafficLight;
 import com.assessment.traffic.schedule.Schedule;
 import com.assessment.traffic.trafficLight.light.Light;
 import com.assessment.traffic.trafficLight.light.LightColour;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
