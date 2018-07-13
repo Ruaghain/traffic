@@ -3,6 +3,8 @@ package com.assessment.traffic.trafficLight;
 import com.assessment.traffic.schedule.Schedule;
 import com.assessment.traffic.trafficLight.light.Light;
 import com.assessment.traffic.trafficLight.light.LightColour;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.Predicate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,20 +36,23 @@ public class TrafficLightImpl implements TrafficLight {
     green = new Light(LightColour.GREEN);
 
     lights.add(red);
-    lights.add(green);
     lights.add(orange);
+    lights.add(green);
 
     //Set the currently displayed traffic light.
     this.currentlyDisplayed = red;
+
+    //Set the traffic light to offline initially.
+    this.status = TrafficLightStatus.OFFLINE;
   }
 
   /**
-   * This method returns all the lights for this traffic light.
+   * This method returns the currently displayed light.
    *
-   * @return The created lights.
+   * @return The currently displayed light.
    */
-  public ArrayList<Light> getLights() {
-    return lights;
+  public Light getCurrentlyDisplayed() {
+    return currentlyDisplayed;
   }
 
   @Override
@@ -67,11 +72,41 @@ public class TrafficLightImpl implements TrafficLight {
     return this.status;
   }
 
+  /**
+   * This method searches the array list for the position of the currently selected light.
+   *
+   * @return The index of the currently selected light.
+   */
+  private int getIndexOfCurrentlySelected() {
+    return ListUtils.indexOf(lights, new Predicate<Light>() {
+      @Override
+      public boolean evaluate(Light light) {
+        return light.getColour().equals(currentlyDisplayed.getColour());
+      }
+    });
+  }
+
   @Override
   public void changeLights() {
-    //Keep on changing the lights while the status of the traffic light is online.
-//    while (this.status == TrafficLightStatus.ONLINE) {
-//
-//    }
+    int currentIndex = getIndexOfCurrentlySelected();
+    //TODO: Look into implementing a circular queue as a replacement for this for loop if there's time
+    for (int index = currentIndex; index >= -1; index--) {
+      //Check the status of the robot, if it's off then bail.
+      if (this.status == TrafficLightStatus.OFFLINE) {
+        break;
+      }
+      //Reset the loop once the value reaches 0.
+      if (getIndexOfCurrentlySelected() == 0) {
+        index = lights.size() - 1;
+      }
+      //Set the currently displayed light.
+      this.currentlyDisplayed = lights.get(index);
+      logger.debug(lights.get(index).getColour());
+      try {
+        Thread.sleep(schedule.duration());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
