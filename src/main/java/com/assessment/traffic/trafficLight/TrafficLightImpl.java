@@ -16,6 +16,7 @@ public class TrafficLightImpl implements TrafficLight {
 
   private static Logger logger;
 
+//  private Thread thread;
   private Schedule schedule;
   private TrafficLightStatus status;
   private Light currentlyDisplayed;
@@ -29,6 +30,8 @@ public class TrafficLightImpl implements TrafficLight {
   public TrafficLightImpl(Logger logger, Schedule schedule) {
     TrafficLightImpl.logger = logger;
     this.schedule = schedule;
+
+//    thread = new Thread(this, "Traffic Light Thread");
 
     //Create the relevant lights for this traffic light.
     red = new Light(LightColour.RED);
@@ -59,6 +62,8 @@ public class TrafficLightImpl implements TrafficLight {
   public void start() {
     logger.debug("Started Traffic Light");
     this.status = TrafficLightStatus.ONLINE;
+//    //Start the traffic light processing in another thread so it doesn't stop the application.
+//    thread.start();
   }
 
   @Override
@@ -77,7 +82,7 @@ public class TrafficLightImpl implements TrafficLight {
    *
    * @return The index of the currently selected light.
    */
-  private int getIndexOfCurrentlySelected() {
+  private int getIndexOfCurrentlyDisplayedLight() {
     return ListUtils.indexOf(lights, new Predicate<Light>() {
       @Override
       public boolean evaluate(Light light) {
@@ -88,15 +93,17 @@ public class TrafficLightImpl implements TrafficLight {
 
   @Override
   public void changeLights() {
-    int currentIndex = getIndexOfCurrentlySelected();
+    int currentIndex = getIndexOfCurrentlyDisplayedLight();
     //TODO: Look into implementing a circular queue as a replacement for this for loop if there's time
+    //Starting from the end of the array because lights in Ireland go from Green --> Orange --> Red.
+    //Could have just added them like that in the array, but it wouldn't be intuitive.
     for (int index = currentIndex; index >= -1; index--) {
       //Check the status of the robot, if it's off then bail.
       if (this.status == TrafficLightStatus.OFFLINE) {
         break;
       }
       //Reset the loop once the value reaches 0.
-      if (getIndexOfCurrentlySelected() == 0) {
+      if (getIndexOfCurrentlyDisplayedLight() == 0) {
         index = lights.size() - 1;
       }
       //Set the currently displayed light.
@@ -108,5 +115,10 @@ public class TrafficLightImpl implements TrafficLight {
         e.printStackTrace();
       }
     }
+  }
+
+  @Override
+  public void run() {
+//    this.changeLights();
   }
 }

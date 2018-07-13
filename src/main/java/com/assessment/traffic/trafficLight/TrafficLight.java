@@ -1,7 +1,6 @@
 package com.assessment.traffic.trafficLight;
 
-public interface TrafficLight
-{
+public interface TrafficLight extends Runnable {
   /**
    * This method starts the traffic light process
    */
@@ -14,6 +13,7 @@ public interface TrafficLight
 
   /**
    * This method returns the status of this traffic light
+   *
    * @return The traffic light status.
    */
   TrafficLightStatus status();
