@@ -1,9 +1,9 @@
-package com.assessment.traffic.schedule;
+package com.assessment.traffic.web.schedule;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class FixedScheduleImpl implements Schedule {
+public class FixedSchedule implements Schedule {
 
   /**
    * This method returns the duration of the schedule

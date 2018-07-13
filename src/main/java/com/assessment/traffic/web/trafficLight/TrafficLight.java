@@ -1,4 +1,4 @@
-package com.assessment.traffic.trafficLight;
+package com.assessment.traffic.web.trafficLight;
 
 public interface TrafficLight extends Runnable {
   /**

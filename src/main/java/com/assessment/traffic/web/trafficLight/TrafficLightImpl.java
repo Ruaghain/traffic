@@ -1,12 +1,13 @@
-package com.assessment.traffic.trafficLight;
+package com.assessment.traffic.web.trafficLight;
 
-import com.assessment.traffic.schedule.Schedule;
-import com.assessment.traffic.trafficLight.light.Light;
-import com.assessment.traffic.trafficLight.light.LightColour;
+import com.assessment.traffic.web.schedule.Schedule;
+import com.assessment.traffic.web.trafficLight.light.Light;
+import com.assessment.traffic.web.trafficLight.light.LightColour;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.Predicate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class TrafficLightImpl implements TrafficLight {
 
   private static Logger logger;
 
-//  private Thread thread;
+  //  private Thread thread;
   private Schedule schedule;
   private TrafficLightStatus status;
   private Light currentlyDisplayed;
@@ -27,7 +28,7 @@ public class TrafficLightImpl implements TrafficLight {
   private Light green;
 
   @Autowired
-  public TrafficLightImpl(Logger logger, Schedule schedule) {
+  public TrafficLightImpl(Logger logger, @Qualifier("databaseSchedule") Schedule schedule) {
     TrafficLightImpl.logger = logger;
     this.schedule = schedule;
 
@@ -108,9 +109,11 @@ public class TrafficLightImpl implements TrafficLight {
       }
       //Set the currently displayed light.
       this.currentlyDisplayed = lights.get(index);
-      logger.debug(lights.get(index).getColour());
+      logger.debug(String.format("Currently displaying '%s'.", lights.get(index).getColour()));
       try {
-        Thread.sleep(schedule.duration());
+        int duration = schedule.duration();
+        logger.debug(String.format("Interval is currently '%d' seconds.", duration / 1000));
+        Thread.sleep(duration);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

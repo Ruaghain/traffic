@@ -1,7 +1,7 @@
-package com.assessment.traffic.trafficLight;
+package com.assessment.traffic.web.trafficLight;
 
-import com.assessment.traffic.schedule.Schedule;
-import com.assessment.traffic.trafficLight.light.LightColour;
+import com.assessment.traffic.web.schedule.Schedule;
+import com.assessment.traffic.web.trafficLight.light.LightColour;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;

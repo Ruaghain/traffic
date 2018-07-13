@@ -1,6 +1,6 @@
 package com.assessment.traffic.service;
 
-import com.assessment.traffic.trafficLight.TrafficLight;
+import com.assessment.traffic.web.trafficLight.TrafficLight;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,7 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
     try {
       for (TrafficLight trafficLight : trafficLights) {
         trafficLight.start();
+        trafficLight.changeLights();
       }
     } catch (Exception e) {
       logger.error("There was a problem starting the traffic lights", e);

@@ -1,4 +1,4 @@
-package com.assessment.traffic.trafficLight.light;
+package com.assessment.traffic.web.trafficLight.light;
 
 public class Light {
 

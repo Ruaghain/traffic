@@ -1,4 +1,4 @@
-package com.assessment.traffic.schedule;
+package com.assessment.traffic.web.schedule;
 
 public interface Schedule {
   /**

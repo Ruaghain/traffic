@@ -1,6 +1,6 @@
 package com.assessment.traffic.service;
 
-import com.assessment.traffic.trafficLight.TrafficLight;
+import com.assessment.traffic.web.trafficLight.TrafficLight;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
