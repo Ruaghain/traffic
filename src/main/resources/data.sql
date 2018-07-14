@@ -68,10 +68,10 @@ insert into TIME_OF_DAY values (24, 3, 3, 6);
 
 --Saturday
 --Morning
-insert into TIME_OF_DAY values (25, 5, 0, 7);
+insert into TIME_OF_DAY values (25, 8, 0, 7);
 --Afternoon
-insert into TIME_OF_DAY values (26, 5, 1, 7);
+insert into TIME_OF_DAY values (26, 8, 1, 7);
 --Evening
-insert into TIME_OF_DAY values (27, 5, 2, 7);
+insert into TIME_OF_DAY values (27, 8, 2, 7);
 --Night
-insert into TIME_OF_DAY values (28, 5, 3, 7);
+insert into TIME_OF_DAY values (28, 8, 3, 7);
