@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 public class DatabaseScheduleTest {
 
   private DayOfWeekRepository dayOfWeekRepository;
-  private DatabaseSchedule databaseSchedule;
+  private DatabaseSchedule subject;
   private Calendar calendar;
   private Logger logger;
 
@@ -28,7 +28,7 @@ public class DatabaseScheduleTest {
     logger = mock(Logger.class);
 
     Mockito.when(dayOfWeekRepository.findByValue(Mockito.anyInt())).thenReturn(mockedDayOfWeek());
-    databaseSchedule = new DatabaseSchedule(logger, dayOfWeekRepository);
+    subject = new DatabaseSchedule(logger, dayOfWeekRepository);
   }
 
   private DayOfWeek mockedDayOfWeek() {
@@ -71,9 +71,9 @@ public class DatabaseScheduleTest {
   public void givenDatabaseSchedule_whenGettingMondayMorning_willReturnCorrectDuration() {
     Mockito.when(calendar.get(Calendar.DAY_OF_WEEK)).thenReturn(6);
     Mockito.when(calendar.get(Calendar.HOUR_OF_DAY)).thenReturn(9);
-    databaseSchedule.setCalendar(calendar);
+    subject.setCalendar(calendar);
 
-    int duration = databaseSchedule.duration();
+    int duration = subject.duration();
     Assert.assertEquals(3000, duration);
   }
 
@@ -81,9 +81,9 @@ public class DatabaseScheduleTest {
   public void givenDatabaseSchedule_whenGettingMondayAfternoon_willReturnCorrectDuration() {
     Mockito.when(calendar.get(Calendar.DAY_OF_WEEK)).thenReturn(6);
     Mockito.when(calendar.get(Calendar.HOUR_OF_DAY)).thenReturn(15);
-    databaseSchedule.setCalendar(calendar);
+    subject.setCalendar(calendar);
 
-    int duration = databaseSchedule.duration();
+    int duration = subject.duration();
     Assert.assertEquals(6000, duration);
   }
 
@@ -91,9 +91,9 @@ public class DatabaseScheduleTest {
   public void givenDatabaseSchedule_whenGettingMondayEvening_willReturnCorrectDuration() {
     Mockito.when(calendar.get(Calendar.DAY_OF_WEEK)).thenReturn(6);
     Mockito.when(calendar.get(Calendar.HOUR_OF_DAY)).thenReturn(18);
-    databaseSchedule.setCalendar(calendar);
+    subject.setCalendar(calendar);
 
-    int duration = databaseSchedule.duration();
+    int duration = subject.duration();
     Assert.assertEquals(9000, duration);
   }
 
@@ -101,10 +101,19 @@ public class DatabaseScheduleTest {
   public void givenDatabaseSchedule_whenGettingMondayNight_willReturnCorrectDuration() {
     Mockito.when(calendar.get(Calendar.DAY_OF_WEEK)).thenReturn(6);
     Mockito.when(calendar.get(Calendar.HOUR_OF_DAY)).thenReturn(22);
-    databaseSchedule.setCalendar(calendar);
+    subject.setCalendar(calendar);
 
-    int duration = databaseSchedule.duration();
+    int duration = subject.duration();
     Assert.assertEquals(12000, duration);
   }
 
+  @Test
+  public void givenDatabaseSchedule_withInvalidCalendar_willReturnTwoThousandMilliseconds() {
+    Mockito.when(calendar.get(Calendar.DAY_OF_WEEK)).thenReturn(6);
+    Mockito.when(calendar.get(Calendar.HOUR_OF_DAY)).thenReturn(26);
+    subject.setCalendar(calendar);
+
+    int duration = subject.duration();
+    Assert.assertEquals(2000, duration);
+  }
 }

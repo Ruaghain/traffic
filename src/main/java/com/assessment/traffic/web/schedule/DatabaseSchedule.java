@@ -32,6 +32,8 @@ public class DatabaseSchedule implements Schedule {
   @Override
   public int duration() {
     logger.debug("Reading the duration from the database.");
+    //Set 2 seconds as the default
+    int result = 2000;
     int dayOfWeekValue = calendar.get(Calendar.DAY_OF_WEEK);
     DayOfWeek dayOfWeek = dayOfWeekRepository.findByValue(dayOfWeekValue);
 
@@ -41,11 +43,10 @@ public class DatabaseSchedule implements Schedule {
 
     for (TimeOfDay time : dayOfWeek.getTimesOfDay()) {
       if (time.getTimeOfDayValue() == period) {
-        return time.getDuration() * 1000;
+        result = time.getDuration() * 1000;
       }
     }
-    //Return 2 seconds as the default
-    return 2000;
+    return result;
   }
 
   /**
@@ -56,8 +57,10 @@ public class DatabaseSchedule implements Schedule {
    * @return The specific part of the day, based on the time passed in.
    */
   private DayPart getPartOfDay(int hourOfDay) {
-    DayPart dayPart = DayPart.MORNING;
-    if (hourOfDay >= 12 && hourOfDay < 17) {
+    DayPart dayPart = DayPart.UNKNOWN;
+    if (hourOfDay >= 1 && hourOfDay < 12) {
+      dayPart = DayPart.MORNING;
+    } else if (hourOfDay >= 12 && hourOfDay < 17) {
       dayPart = DayPart.AFTERNOON;
     } else if (hourOfDay >= 17 && hourOfDay < 20) {
       dayPart = DayPart.EVENING;

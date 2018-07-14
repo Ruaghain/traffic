@@ -13,13 +13,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.mock;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class TrafficLightImplTest {
 
   private Logger logger;
   private Schedule schedule;
-  private TrafficLightImpl trafficLight;
+  private TrafficLightImpl subject;
 
   @Before
   public void setUp() throws Exception {
@@ -27,35 +25,35 @@ public class TrafficLightImplTest {
     schedule = mock(Schedule.class);
     Mockito.when(schedule.duration()).thenReturn(2000);
 
-    trafficLight = new TrafficLightImpl(logger, schedule);
+    subject = new TrafficLightImpl(logger, schedule);
   }
 
   @Test
   public void givenTrafficLight_whenInitialised_willHaveStatusOffline() {
-    Assert.assertEquals(TrafficLightStatus.OFFLINE, trafficLight.status());
+    Assert.assertEquals(TrafficLightStatus.OFFLINE, subject.status());
   }
 
   @Test
   public void givenTrafficLight_whenInitialised_willDisplayRedLight() {
-    Assert.assertEquals(LightColour.RED, trafficLight.getCurrentlyDisplayed().getColour());
+    Assert.assertEquals(LightColour.RED, subject.getCurrentlyDisplayed().getColour());
   }
 
   @Test
   public void givenTrafficLight_whenStarting_willSetStatusToOnline() {
-    trafficLight.start();
-    Assert.assertEquals(TrafficLightStatus.ONLINE, trafficLight.status());
+    subject.start();
+    Assert.assertEquals(TrafficLightStatus.ONLINE, subject.status());
   }
 
   @Test
   public void givenTrafficLight_whenStopping_willSetStatusToOffline() {
-    trafficLight.stop();
-    Assert.assertEquals(TrafficLightStatus.OFFLINE, trafficLight.status());
+    subject.stop();
+    Assert.assertEquals(TrafficLightStatus.OFFLINE, subject.status());
   }
 
  // @Test
   public void givenTrafficLight_whenChangingLights_willSetLightAppropriately() throws InterruptedException {
-    trafficLight.start();
-    trafficLight.changeLights();
-    trafficLight.stop();
+//    subject.start();
+//    subject.changeLights();
+//    subject.stop();
   }
 }

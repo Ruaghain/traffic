@@ -20,7 +20,7 @@ public class TrafficManagerServiceImplTest {
 
   private Logger logger;
   private List<TrafficLight> trafficLights = new ArrayList<>();
-  private TrafficManagerService trafficManagerService;
+  private TrafficManagerService subject;
 
   @Before
   public void setUp() throws Exception {
@@ -31,7 +31,7 @@ public class TrafficManagerServiceImplTest {
     trafficLights.add(trafficLight1);
     trafficLights.add(trafficLight2);
 
-    trafficManagerService = new TrafficManagerServiceImpl(logger, trafficLights);
+    subject = new TrafficManagerServiceImpl(logger, trafficLights);
   }
 
 //  @Test
@@ -41,24 +41,25 @@ public class TrafficManagerServiceImplTest {
 
   @Test
   public void givenMultipleTrafficLights_whenGettingTheList_willReturnTheCorrectNumber() {
-    Assert.assertEquals(2, trafficManagerService.getTrafficLights().size());
+    Assert.assertEquals(2, subject.getTrafficLights().size());
   }
 
   @Test
   public void givenMultipleTrafficLights_whenStartingTheTrafficLights_willCallStart() {
-    trafficManagerService.start();
-    List<TrafficLight> trafficLights = trafficManagerService.getTrafficLights();
+    subject.start();
+    List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
-      verify(trafficLight, Mockito.atMost(1)).start();
+      verify(trafficLight, Mockito.times(1)).start();
+      verify(trafficLight, Mockito.times(1)).changeLights();
     }
   }
 
   @Test
   public void givenMultipleTrafficLights_whenStoppingTheTrafficLights_willCallStop() {
-    trafficManagerService.stop();
-    List<TrafficLight> trafficLights = trafficManagerService.getTrafficLights();
+    subject.stop();
+    List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
-      verify(trafficLight, Mockito.atMost(1)).stop();
+      verify(trafficLight, Mockito.times(1)).stop();
     }
   }
 }

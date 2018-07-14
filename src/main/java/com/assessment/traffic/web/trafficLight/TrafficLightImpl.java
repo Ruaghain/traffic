@@ -28,7 +28,7 @@ public class TrafficLightImpl implements TrafficLight {
   private Light green;
 
   @Autowired
-  public TrafficLightImpl(Logger logger, @Qualifier("databaseSchedule") Schedule schedule) {
+  public TrafficLightImpl(Logger logger, @Qualifier("fixedSchedule") Schedule schedule) {
     TrafficLightImpl.logger = logger;
     this.schedule = schedule;
 
@@ -115,7 +115,7 @@ public class TrafficLightImpl implements TrafficLight {
         logger.debug(String.format("Interval is currently '%d' seconds.", duration / 1000));
         Thread.sleep(duration);
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        logger.error("There was an error during the sleep process.", e);
       }
     }
   }
