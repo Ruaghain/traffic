@@ -4,6 +4,7 @@ import com.assessment.traffic.data.entity.DayOfWeek;
 import com.assessment.traffic.data.entity.DayPart;
 import com.assessment.traffic.data.entity.TimeOfDay;
 import com.assessment.traffic.repository.DayOfWeekRepository;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,14 +19,16 @@ public class DatabaseScheduleTest {
   private DayOfWeekRepository dayOfWeekRepository;
   private DatabaseSchedule databaseSchedule;
   private Calendar calendar;
+  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
     dayOfWeekRepository = mock(DayOfWeekRepository.class);
     calendar = mock(Calendar.class);
+    logger = mock(Logger.class);
 
     Mockito.when(dayOfWeekRepository.findByValue(Mockito.anyInt())).thenReturn(mockedDayOfWeek());
-    databaseSchedule = new DatabaseSchedule(dayOfWeekRepository);
+    databaseSchedule = new DatabaseSchedule(logger, dayOfWeekRepository);
   }
 
   private DayOfWeek mockedDayOfWeek() {
