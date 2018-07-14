@@ -45,16 +45,16 @@ public class DatabaseScheduleTest {
     morning.setDuration(3);
 
     TimeOfDay afternoon = new TimeOfDay();
-    morning.setTimeOfDayValue(DayPart.AFTERNOON);
-    morning.setDuration(6);
+    afternoon.setTimeOfDayValue(DayPart.AFTERNOON);
+    afternoon.setDuration(6);
 
     TimeOfDay evening = new TimeOfDay();
-    morning.setTimeOfDayValue(DayPart.EVENING);
-    morning.setDuration(9);
+    evening.setTimeOfDayValue(DayPart.EVENING);
+    evening.setDuration(9);
 
     TimeOfDay night = new TimeOfDay();
-    morning.setTimeOfDayValue(DayPart.NIGHT);
-    morning.setDuration(12);
+    night.setTimeOfDayValue(DayPart.NIGHT);
+    night.setDuration(12);
 
     timeOfDays.add(morning);
     timeOfDays.add(afternoon);

@@ -4,6 +4,7 @@ import com.assessment.traffic.data.entity.DayOfWeek;
 import com.assessment.traffic.data.entity.DayPart;
 import com.assessment.traffic.data.entity.TimeOfDay;
 import com.assessment.traffic.repository.DayOfWeekRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +13,14 @@ import java.util.Calendar;
 @Component
 public class DatabaseSchedule implements Schedule {
 
+  private static Logger logger;
+
   private DayOfWeekRepository dayOfWeekRepository;
   private Calendar calendar;
 
   @Autowired
-  public DatabaseSchedule(DayOfWeekRepository dayOfWeekRepository) {
+  public DatabaseSchedule(Logger logger, DayOfWeekRepository dayOfWeekRepository) {
+    DatabaseSchedule.logger = logger;
     this.dayOfWeekRepository = dayOfWeekRepository;
     this.calendar = Calendar.getInstance();
   }
@@ -27,11 +31,13 @@ public class DatabaseSchedule implements Schedule {
 
   @Override
   public int duration() {
+    logger.debug("Reading the duration from the database.");
     int dayOfWeekValue = calendar.get(Calendar.DAY_OF_WEEK);
     DayOfWeek dayOfWeek = dayOfWeekRepository.findByValue(dayOfWeekValue);
 
     int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);
     DayPart period = getPartOfDay(timeOfDay);
+    logger.debug(String.format("Getting the duration for '%s' in the '%s' period", java.time.DayOfWeek.of(dayOfWeek.getValue()), period));
 
     for (TimeOfDay time : dayOfWeek.getTimesOfDay()) {
       if (time.getTimeOfDayValue() == period) {
