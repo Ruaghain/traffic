@@ -5,7 +5,7 @@ import com.assessment.traffic.web.trafficLight.TrafficLight;
 import java.util.List;
 
 public interface TrafficManagerService {
-  void start();
-  void stop();
+  boolean start();
+  boolean stop();
   List<TrafficLight> getTrafficLights();
 }

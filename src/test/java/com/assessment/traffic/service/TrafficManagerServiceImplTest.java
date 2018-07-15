@@ -34,11 +34,6 @@ public class TrafficManagerServiceImplTest {
     subject = new TrafficManagerServiceImpl(logger, trafficLights);
   }
 
-//  @Test
-//  public void givenNoTrafficLights_whenGettingTheList_WillReturnZero() {
-//
-//  }
-
   @Test
   public void givenMultipleTrafficLights_whenGettingTheList_willReturnTheCorrectNumber() {
     Assert.assertEquals(2, subject.getTrafficLights().size());
@@ -46,20 +41,22 @@ public class TrafficManagerServiceImplTest {
 
   @Test
   public void givenMultipleTrafficLights_whenStartingTheTrafficLights_willCallStart() {
-    subject.start();
+    boolean result = subject.start();
     List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
       verify(trafficLight, Mockito.times(1)).start();
       verify(trafficLight, Mockito.times(1)).changeLights();
     }
+    Assert.assertTrue(result);
   }
 
   @Test
   public void givenMultipleTrafficLights_whenStoppingTheTrafficLights_willCallStop() {
-    subject.stop();
+    boolean result = subject.stop();
     List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
       verify(trafficLight, Mockito.times(1)).stop();
     }
+    Assert.assertTrue(result);
   }
 }

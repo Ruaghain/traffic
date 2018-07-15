@@ -28,7 +28,7 @@ public class TrafficLightImpl implements TrafficLight {
   private Light green;
 
   @Autowired
-  public TrafficLightImpl(Logger logger, @Qualifier("fixedSchedule") Schedule schedule) {
+  public TrafficLightImpl(Logger logger, @Qualifier("databaseSchedule") Schedule schedule) {
     TrafficLightImpl.logger = logger;
     this.schedule = schedule;
 
@@ -59,6 +59,10 @@ public class TrafficLightImpl implements TrafficLight {
     return currentlyDisplayed;
   }
 
+  private void setCurrentlyDisplayed(Light currentlyDisplayed) {
+      this.currentlyDisplayed = currentlyDisplayed;
+  }
+
   @Override
   public void start() {
     logger.debug("Started Traffic Light");
@@ -83,7 +87,7 @@ public class TrafficLightImpl implements TrafficLight {
    *
    * @return The index of the currently selected light.
    */
-  private int getIndexOfCurrentlyDisplayedLight() {
+  private int getCurrentlyDisplayedIndex() {
     return ListUtils.indexOf(lights, new Predicate<Light>() {
       @Override
       public boolean evaluate(Light light) {
@@ -94,7 +98,7 @@ public class TrafficLightImpl implements TrafficLight {
 
   @Override
   public void changeLights() {
-    int currentIndex = getIndexOfCurrentlyDisplayedLight();
+    int currentIndex = getCurrentlyDisplayedIndex();
     //TODO: Look into implementing a circular queue as a replacement for this for loop if there's time
     //Starting from the end of the array because lights in Ireland go from Green --> Orange --> Red.
     //Could have just added them like that in the array, but it wouldn't be intuitive.
@@ -104,12 +108,12 @@ public class TrafficLightImpl implements TrafficLight {
         break;
       }
       //Reset the loop once the value reaches 0.
-      if (getIndexOfCurrentlyDisplayedLight() == 0) {
+      if (getCurrentlyDisplayedIndex() == 0) {
         index = lights.size() - 1;
       }
       //Set the currently displayed light.
-      this.currentlyDisplayed = lights.get(index);
-      logger.debug(String.format("Currently displaying '%s'.", lights.get(index).getColour()));
+      setCurrentlyDisplayed(lights.get(index));
+      logger.debug(String.format("Currently displaying '%s'.", getCurrentlyDisplayed().getColour()));
       try {
         int duration = schedule.duration();
         logger.debug(String.format("Interval is currently '%d' seconds.", duration / 1000));

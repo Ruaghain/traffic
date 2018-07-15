@@ -1,6 +1,8 @@
 package com.assessment.traffic.service;
 
+import com.assessment.traffic.exception.TrafficException;
 import com.assessment.traffic.web.trafficLight.TrafficLight;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,29 +28,43 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
 
   //Added this post construct annotation here to start up the traffic light processing as soon as this bean
   //has been initialised.
-  @PostConstruct
+//  @PostConstruct
   @Override
-  public void start() {
-    logger.info("STARTING - Automatically starting registered traffic lights.");
+  public boolean start() {
+    logger.debug("STARTING - Automatically starting registered traffic lights.");
     try {
+      if (CollectionUtils.isEmpty(trafficLights)) {
+        throw new TrafficException("There are no traffic lights to process.");
+      }
+
       for (TrafficLight trafficLight : trafficLights) {
         trafficLight.start();
         trafficLight.changeLights();
       }
+      logger.debug("Successfully started traffic lights");
     } catch (Exception e) {
-      logger.error("There was a problem starting the traffic lights", e);
+      logger.error("There was an error starting the traffic lights.", e);
+      return false;
     }
+    return true;
   }
 
   @Override
-  public void stop() {
-    logger.info("STOPPING - Automatically stopping registered traffic lights.");
+  public boolean stop() {
+    logger.debug("STOPPING - Automatically stopping registered traffic lights.");
     try {
+      if (CollectionUtils.isEmpty(trafficLights)) {
+        throw new TrafficException("There are no traffic lights to process.");
+      }
+
       for (TrafficLight trafficLight : trafficLights) {
         trafficLight.stop();
       }
+      logger.debug("Successfully stopped traffic lights");
     } catch (Exception e) {
-      logger.error("There was a problem stopping the traffic lights", e);
+      logger.error("There was an error stopping the traffic lights.", e);
+      return false;
     }
+    return true;
   }
 }

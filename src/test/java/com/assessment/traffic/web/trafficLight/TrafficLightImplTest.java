@@ -6,10 +6,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.mock;
 
@@ -50,10 +47,18 @@ public class TrafficLightImplTest {
     Assert.assertEquals(TrafficLightStatus.OFFLINE, subject.status());
   }
 
- // @Test
-  public void givenTrafficLight_whenChangingLights_willSetLightAppropriately() throws InterruptedException {
-//    subject.start();
-//    subject.changeLights();
-//    subject.stop();
+  @Test
+  public void givenTrafficLight_whenChangingLights_willBreakIfNotOnline() {
+    subject.changeLights();
+    Mockito.verify(schedule, Mockito.never()).duration();
   }
+
+//  @Test
+//  public void givenTrafficLight_whenChangingLights_willSetLightAppropriately() throws InterruptedException {
+//    subject.changeLights();
+//    TimeUnit.SECONDS.sleep(5);
+//    subject.stop();
+//
+//    Mockito.verify(schedule, Mockito.atLeast(1)).duration();
+//  }
 }

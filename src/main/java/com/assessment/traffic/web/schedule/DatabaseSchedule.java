@@ -39,7 +39,8 @@ public class DatabaseSchedule implements Schedule {
 
     int timeOfDay = calendar.get(Calendar.HOUR_OF_DAY);
     DayPart period = getPartOfDay(timeOfDay);
-    logger.debug(String.format("Getting the duration for '%s' in the '%s' period", java.time.DayOfWeek.of(dayOfWeek.getValue() - 1), period));
+    //TODO: Need to try and get the proper week day for the log message.
+    logger.debug(String.format("Getting the duration for '%s' in the '%s' period", dayOfWeek.getValue(), period));
 
     for (TimeOfDay time : dayOfWeek.getTimesOfDay()) {
       if (time.getTimeOfDayValue() == period) {
