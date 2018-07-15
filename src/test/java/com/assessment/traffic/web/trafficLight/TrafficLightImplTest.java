@@ -1,5 +1,6 @@
 package com.assessment.traffic.web.trafficLight;
 
+import com.assessment.traffic.exception.TrafficException;
 import com.assessment.traffic.web.schedule.Schedule;
 import com.assessment.traffic.web.trafficLight.light.LightColour;
 import org.apache.log4j.Logger;
@@ -20,9 +21,10 @@ public class TrafficLightImplTest {
   public void setUp() throws Exception {
     logger = mock(Logger.class);
     schedule = mock(Schedule.class);
-    Mockito.when(schedule.duration()).thenReturn(2000);
+    Mockito.when(schedule.duration()).thenReturn(0);
 
     subject = new TrafficLightImpl(logger, schedule);
+    subject.setChangeLightsOnce(true);
   }
 
   @Test
@@ -31,8 +33,8 @@ public class TrafficLightImplTest {
   }
 
   @Test
-  public void givenTrafficLight_whenInitialised_willDisplayRedLight() {
-    Assert.assertEquals(LightColour.RED, subject.getCurrentlyDisplayed().getColour());
+  public void givenTrafficLight_whenInitialised_willDisplayGreenLight() {
+    Assert.assertEquals(LightColour.GREEN, subject.getCurrentlyDisplayed().getColour());
   }
 
   @Test
@@ -53,12 +55,26 @@ public class TrafficLightImplTest {
     Mockito.verify(schedule, Mockito.never()).duration();
   }
 
-//  @Test
-//  public void givenTrafficLight_whenChangingLights_willSetLightAppropriately() throws InterruptedException {
-//    subject.changeLights();
-//    TimeUnit.SECONDS.sleep(5);
-//    subject.stop();
-//
-//    Mockito.verify(schedule, Mockito.atLeast(1)).duration();
-//  }
+  @Test
+  public void givenTrafficLight_whenChangingLights_willSetLightAppropriately() {
+    subject.start();
+    subject.changeLights();
+
+    Mockito.verify(schedule, Mockito.atMost(3)).duration();
+  }
+
+  @Test
+  public void givenTrafficLight_whenExecutingRun_willExecuteChangeLights() {
+    TrafficLightImpl spiedTrafficLight = Mockito.spy(subject);
+    spiedTrafficLight.run();
+    Mockito.verify(spiedTrafficLight, Mockito.atLeastOnce()).changeLights();
+  }
+
+  @Test(expected = TrafficException.class)
+  public void givenTrafficLight_whenChangingLights_willThrowAnExceptionForSchedule() {
+    Mockito.when(schedule.duration()).thenThrow(RuntimeException.class);
+
+    subject.start();
+    subject.changeLights();
+  }
 }

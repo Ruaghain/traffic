@@ -2,6 +2,7 @@ package com.assessment.traffic.service;
 
 import com.assessment.traffic.exception.TrafficException;
 import com.assessment.traffic.web.trafficLight.TrafficLight;
+import com.assessment.traffic.web.trafficLight.TrafficLightStatus;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,13 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
       }
 
       for (TrafficLight trafficLight : trafficLights) {
-        trafficLight.start();
-        //Start the traffic light in a new Thread so it doesn't hold up the web app.
-        taskExecutor.execute(trafficLight);
+        if (trafficLight.status() == TrafficLightStatus.OFFLINE) {
+          trafficLight.start();
+          //Start the traffic light in a new Thread so it doesn't hold up the web app.
+          taskExecutor.execute(trafficLight);
+        } else {
+          logger.info("Traffic light is already online");
+        }
       }
       logger.debug("Successfully started traffic lights");
     } catch (Exception e) {
@@ -63,7 +68,11 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
       }
 
       for (TrafficLight trafficLight : trafficLights) {
-        trafficLight.stop();
+        if (trafficLight.status() == TrafficLightStatus.ONLINE) {
+          trafficLight.stop();
+        } else {
+          logger.info("Traffic light is already offline");
+        }
       }
       logger.debug("Successfully stopped traffic lights");
     } catch (Exception e) {
