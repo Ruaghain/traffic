@@ -95,6 +95,7 @@ public class TrafficLightImpl implements TrafficLight {
         logger.debug(String.format("Currently displaying '%s'.", getCurrentlyDisplayed().getColour()));
         try {
           int duration = schedule.duration();
+          logger.debug(String.format("Interval is currently '%d' seconds.", duration / 1000));
           Thread.sleep(duration);
           //Would generally not catch the exception here, but handle it in the service - you can't add
           //an exception to the method signature for the run method.
