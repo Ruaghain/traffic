@@ -4,20 +4,20 @@ import com.assessment.traffic.web.schedule.Schedule;
 import com.assessment.traffic.web.trafficLight.light.Light;
 import com.assessment.traffic.web.trafficLight.light.LightColour;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.Predicate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Component
+@Scope("prototype")
 public class TrafficLightImpl implements TrafficLight {
 
   private static Logger logger;
 
-  //  private Thread thread;
   private Schedule schedule;
   private TrafficLightStatus status;
   private Light currentlyDisplayed;
@@ -31,8 +31,6 @@ public class TrafficLightImpl implements TrafficLight {
   public TrafficLightImpl(Logger logger, @Qualifier("databaseSchedule") Schedule schedule) {
     TrafficLightImpl.logger = logger;
     this.schedule = schedule;
-
-//    thread = new Thread(this, "Traffic Light Thread");
 
     //Create the relevant lights for this traffic light.
     red = new Light(LightColour.RED);
@@ -88,12 +86,7 @@ public class TrafficLightImpl implements TrafficLight {
    * @return The index of the currently selected light.
    */
   private int getCurrentlyDisplayedIndex() {
-    return ListUtils.indexOf(lights, new Predicate<Light>() {
-      @Override
-      public boolean evaluate(Light light) {
-        return light.getColour().equals(currentlyDisplayed.getColour());
-      }
-    });
+    return ListUtils.indexOf(lights, (light) -> light.getColour().equals(currentlyDisplayed.getColour()));
   }
 
   @Override
@@ -107,6 +100,7 @@ public class TrafficLightImpl implements TrafficLight {
       if (this.status == TrafficLightStatus.OFFLINE) {
         break;
       }
+
       //Reset the loop once the value reaches 0.
       if (getCurrentlyDisplayedIndex() == 0) {
         index = lights.size() - 1;
@@ -126,6 +120,6 @@ public class TrafficLightImpl implements TrafficLight {
 
   @Override
   public void run() {
-//    this.changeLights();
+    this.changeLights();
   }
 }

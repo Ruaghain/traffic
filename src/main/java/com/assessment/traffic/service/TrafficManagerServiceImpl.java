@@ -5,6 +5,7 @@ import com.assessment.traffic.web.trafficLight.TrafficLight;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -14,12 +15,15 @@ import java.util.List;
 public class TrafficManagerServiceImpl implements TrafficManagerService {
 
   private static Logger logger;
+
   private List<TrafficLight> trafficLights;
+  private TaskExecutor taskExecutor;
 
   @Autowired
-  public TrafficManagerServiceImpl(Logger logger, List<TrafficLight> trafficLights) {
+  public TrafficManagerServiceImpl(Logger logger, List<TrafficLight> trafficLights, TaskExecutor taskExecutor) {
     TrafficManagerServiceImpl.logger = logger;
     this.trafficLights = trafficLights;
+    this.taskExecutor = taskExecutor;
   }
 
   public List<TrafficLight> getTrafficLights() {
@@ -28,7 +32,7 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
 
   //Added this post construct annotation here to start up the traffic light processing as soon as this bean
   //has been initialised.
-//  @PostConstruct
+  @PostConstruct
   @Override
   public boolean start() {
     logger.debug("STARTING - Automatically starting registered traffic lights.");
@@ -39,7 +43,8 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
 
       for (TrafficLight trafficLight : trafficLights) {
         trafficLight.start();
-        trafficLight.changeLights();
+        //Start the traffic light in a new Thread so it doesn't hold up the web app.
+        taskExecutor.execute(trafficLight);
       }
       logger.debug("Successfully started traffic lights");
     } catch (Exception e) {

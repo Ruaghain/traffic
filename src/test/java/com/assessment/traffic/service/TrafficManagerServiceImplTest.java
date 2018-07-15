@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -19,19 +20,24 @@ import static org.mockito.Mockito.verify;
 public class TrafficManagerServiceImplTest {
 
   private Logger logger;
+
   private List<TrafficLight> trafficLights = new ArrayList<>();
+  private TaskExecutor taskExecutor;
+
   private TrafficManagerService subject;
 
   @Before
   public void setUp() throws Exception {
     logger = mock(Logger.class);
+
     TrafficLight trafficLight1 = mock(TrafficLight.class);
     TrafficLight trafficLight2 = mock(TrafficLight.class);
+    taskExecutor = mock(TaskExecutor.class);
 
     trafficLights.add(trafficLight1);
     trafficLights.add(trafficLight2);
 
-    subject = new TrafficManagerServiceImpl(logger, trafficLights);
+    subject = new TrafficManagerServiceImpl(logger, trafficLights, taskExecutor);
   }
 
   @Test
@@ -45,8 +51,8 @@ public class TrafficManagerServiceImplTest {
     List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
       verify(trafficLight, Mockito.times(1)).start();
-      verify(trafficLight, Mockito.times(1)).changeLights();
     }
+    verify(taskExecutor, Mockito.times(2)).execute(Mockito.any(Runnable.class));
     Assert.assertTrue(result);
   }
 
