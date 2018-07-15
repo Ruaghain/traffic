@@ -8,7 +8,18 @@
 
 <!--Obviously in an ideal world the styling and css will be in separate files.-->
 <style>
+  .trafficLight-border {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: lightgray;
+    width: 240px;
+    height: 540px;
+  }
+
   .trafficLight {
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -17,6 +28,7 @@
     background-color: black;
     width: 200px;
     height: 500px;
+    margin-left: 20px;
   }
 
   .trafficLight__light {
@@ -56,6 +68,27 @@
     background: limegreen;
     background: radial-gradient(circle at 80px 80px, limegreen, #000);
   }
+
+  .trafficLight__button {
+    width: 50px;
+    height: 50px;
+    background-color: darkgreen;
+    transition-duration: 0.4s;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-left: 85px;
+    margin-top: 50px;
+    cursor: pointer;
+  }
+
+  .trafficLight__button:hover {
+    background-color: green;
+  }
+
 </style>
 
 <body>
@@ -65,9 +98,9 @@
     ORANGE: 1,
     GREEN: 2,
     properties: {
-      0: {name: "red", value: 1},
-      1: {name: "orange", value: 2},
-      2: {name: "green", value: 3}
+      0: { name: "red", value: 1 },
+      1: { name: "orange", value: 2 },
+      2: { name: "green", value: 3 }
     }
   };
 
@@ -117,7 +150,7 @@
   });
 </script>
 
-<div>
+<div class="trafficLight-border">
   <div class="trafficLight" id="trafficLight">
     <div class="trafficLight__light trafficLight__light--red" id="red">
     </div>
@@ -126,7 +159,8 @@
     <div class="trafficLight__light trafficLight__light--green" id="green">
     </div>
   </div>
-  <button id="step">Click Me!</button>
 </div>
+<!--Add a pole div behind the button to make it look better if there's time.-->
+<button class="trafficLight__button" id="step">Press</button>
 </body>
 </html>
