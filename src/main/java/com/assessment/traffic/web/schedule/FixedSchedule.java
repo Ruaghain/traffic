@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FixedSchedule implements Schedule {
+public class FixedSchedule extends BaseSchedule {
 
   private static Logger logger;
 
@@ -21,6 +21,6 @@ public class FixedSchedule implements Schedule {
   @Override
   public int duration() {
     logger.debug("Returning a fixed 2 milliseconds for the duration.");
-    return 2 * 1000;
+    return getDurationInMilliseconds(DEFAULT_DURATION);
   }
 }

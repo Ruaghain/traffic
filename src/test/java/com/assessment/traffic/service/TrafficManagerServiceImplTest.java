@@ -1,6 +1,7 @@
 package com.assessment.traffic.service;
 
 import com.assessment.traffic.web.trafficLight.TrafficLight;
+import com.assessment.traffic.web.trafficLight.TrafficLightStatus;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +24,8 @@ public class TrafficManagerServiceImplTest {
 
   private List<TrafficLight> trafficLights = new ArrayList<>();
   private TaskExecutor taskExecutor;
+  private TrafficLight trafficLight1;
+  private TrafficLight trafficLight2;
 
   private TrafficManagerService subject;
 
@@ -30,8 +33,9 @@ public class TrafficManagerServiceImplTest {
   public void setUp() throws Exception {
     logger = mock(Logger.class);
 
-    TrafficLight trafficLight1 = mock(TrafficLight.class);
-    TrafficLight trafficLight2 = mock(TrafficLight.class);
+    trafficLight1 = mock(TrafficLight.class);
+    trafficLight2 = mock(TrafficLight.class);
+
     taskExecutor = mock(TaskExecutor.class);
 
     trafficLights.add(trafficLight1);
@@ -47,6 +51,9 @@ public class TrafficManagerServiceImplTest {
 
   @Test
   public void givenMultipleTrafficLights_whenStartingTheTrafficLights_willCallStart() {
+    Mockito.when(trafficLight1.status()).thenReturn(TrafficLightStatus.OFFLINE);
+    Mockito.when(trafficLight2.status()).thenReturn(TrafficLightStatus.OFFLINE);
+
     boolean result = subject.start();
     List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
@@ -58,11 +65,34 @@ public class TrafficManagerServiceImplTest {
 
   @Test
   public void givenMultipleTrafficLights_whenStoppingTheTrafficLights_willCallStop() {
+    Mockito.when(trafficLight1.status()).thenReturn(TrafficLightStatus.ONLINE);
+    Mockito.when(trafficLight2.status()).thenReturn(TrafficLightStatus.ONLINE);
+
     boolean result = subject.stop();
     List<TrafficLight> trafficLights = subject.getTrafficLights();
     for (TrafficLight trafficLight : trafficLights) {
       verify(trafficLight, Mockito.times(1)).stop();
     }
+    Assert.assertTrue(result);
+  }
+
+  @Test
+  public void givenMultipleTrafficLights_whenStoppingTrafficLightsWhichAreAlreadyStopped_willCallLog() {
+    Mockito.when(trafficLight1.status()).thenReturn(TrafficLightStatus.OFFLINE);
+    Mockito.when(trafficLight2.status()).thenReturn(TrafficLightStatus.OFFLINE);
+
+    boolean result = subject.stop();
+    verify(logger, Mockito.times(2)).info(Mockito.any());
+    Assert.assertTrue(result);
+  }
+
+  @Test
+  public void givenMultipleTrafficLights_whenStartingTrafficLightsWhichAreAlreadyStarted_willCallLog() {
+    Mockito.when(trafficLight1.status()).thenReturn(TrafficLightStatus.ONLINE);
+    Mockito.when(trafficLight2.status()).thenReturn(TrafficLightStatus.ONLINE);
+
+    boolean result = subject.start();
+    verify(logger, Mockito.times(2)).info(Mockito.any());
     Assert.assertTrue(result);
   }
 }

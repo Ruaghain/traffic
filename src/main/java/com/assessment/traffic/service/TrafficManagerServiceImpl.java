@@ -36,7 +36,7 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
   @PostConstruct
   @Override
   public boolean start() {
-    logger.debug("STARTING - Automatically starting registered traffic lights.");
+    logger.debug("STARTING - registered traffic lights.");
     try {
       if (CollectionUtils.isEmpty(trafficLights)) {
         throw new TrafficException("There are no traffic lights to process.");
@@ -61,7 +61,7 @@ public class TrafficManagerServiceImpl implements TrafficManagerService {
 
   @Override
   public boolean stop() {
-    logger.debug("STOPPING - Automatically stopping registered traffic lights.");
+    logger.debug("STOPPING - registered traffic lights.");
     try {
       if (CollectionUtils.isEmpty(trafficLights)) {
         throw new TrafficException("There are no traffic lights to process.");

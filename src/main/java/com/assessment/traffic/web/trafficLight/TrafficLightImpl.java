@@ -96,6 +96,8 @@ public class TrafficLightImpl implements TrafficLight {
         try {
           int duration = schedule.duration();
           Thread.sleep(duration);
+          //Would generally not catch the exception here, but handle it in the service - you can't add
+          //an exception to the method signature for the run method.
         } catch (Exception e) {
           logger.error("There was an error during the sleep process.", e);
           throw new TrafficException("There was an error during the sleep process");

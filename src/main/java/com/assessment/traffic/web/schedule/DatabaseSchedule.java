@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Calendar;
 
 @Component
-public class DatabaseSchedule implements Schedule {
+public class DatabaseSchedule extends BaseSchedule {
 
   private static Logger logger;
 
@@ -33,7 +33,7 @@ public class DatabaseSchedule implements Schedule {
   public int duration() {
     logger.debug("Reading the duration from the database.");
     //Set 2 seconds as the default
-    int result = 2000;
+    int result = getDurationInMilliseconds(DEFAULT_DURATION);
     int dayOfWeekValue = calendar.get(Calendar.DAY_OF_WEEK);
     DayOfWeek dayOfWeek = dayOfWeekRepository.findByValue(dayOfWeekValue);
 
@@ -44,7 +44,7 @@ public class DatabaseSchedule implements Schedule {
 
     for (TimeOfDay time : dayOfWeek.getTimesOfDay()) {
       if (time.getTimeOfDayValue() == period) {
-        result = time.getDuration() * 1000;
+        result = getDurationInMilliseconds(time.getDuration());
       }
     }
     return result;
