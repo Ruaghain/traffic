@@ -9,7 +9,8 @@ within the day, namely:
 * EVENING
 * NIGHT
 
-To start the application please run the following command `gradle bootRun` - This obviously assumes that you have gradle installed.
+This data is pre-populated in the database when the application starts. To start the application please run the 
+following command `gradle bootRun` - This obviously assumes that you have gradle installed.
 
 Once the application has started, you'll notice that the relevant light transitioning will immediately be 
 logged to the screen, along with the duration.

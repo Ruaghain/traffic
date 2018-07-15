@@ -8,6 +8,14 @@
 
 <!--Obviously in an ideal world the styling and css will be in separate files.-->
 <style>
+  .trafficLight-pole {
+    width: 100px;
+    height: 400px;
+    margin-left: 70px;
+    background: #898989 linear-gradient(to right, #000, lightgray);
+    border-right: 1px solid black;
+  }
+
   .trafficLight-border {
     border-radius: 20px;
     display: flex;
@@ -16,6 +24,7 @@
     background-color: lightgray;
     width: 240px;
     height: 540px;
+    /*border: 1px solid black;*/
   }
 
   .trafficLight {
@@ -69,7 +78,7 @@
     background: radial-gradient(circle at 80px 80px, limegreen, #000);
   }
 
-  .trafficLight__button {
+  .traffic-pole__button {
     width: 50px;
     height: 50px;
     background-color: darkgreen;
@@ -80,12 +89,12 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    margin-left: 85px;
+    margin-left: 25px;
     margin-top: 50px;
     cursor: pointer;
   }
 
-  .trafficLight__button:hover {
+  .traffic-pole__button:hover {
     background-color: green;
   }
 
@@ -160,7 +169,8 @@
     </div>
   </div>
 </div>
-<!--Add a pole div behind the button to make it look better if there's time.-->
-<button class="trafficLight__button" id="step">Press</button>
+<div class="trafficLight-pole">
+  <button class="traffic-pole__button" id="step">Press</button>
+</div>
 </body>
 </html>
